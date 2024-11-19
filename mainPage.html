@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Math</title>
+    <link rel="stylesheet" href="general.css">
+    <link rel="stylesheet" href="mainPage.css">
+</head>
+<body id="bdy">
+
+        <div id="theUser">
+            <img class="userleft" src="תמונות/user.png" alt="user">
+            <p class="userleft" id="thename"></p>
+        </div>
+        <div id="userdiv">
+            
+        </div>
+        <div id="btndiv">
+            <input class="btnloacle" id="play" type="button" value="שחק"><br>
+            <input class="btnloacle" id="instructions" type="button" value="הוראות"><br>
+            <input class="btnloacle" id="hiest" type="button" value="שיא"><br>
+            <input class="btnloacle" id="user" type="button" value="משתמשים">
+        </div>       
+
+    <script>
+        /*
+        localStorage.removeItem('usersarr')
+        localStorage.removeItem('currentUserSt')*/
+        //מחלקה המכילה פרטי משתמש
+        class user{
+            constructor(name,highestScre,password){
+                this.name=name
+                this.highestScre=highestScre
+                this.password=password
+            }
+        }
+        let currentUser// משתנה עבור המשתמש הנוכחי
+        if(localStorage.getItem('currentUserSt')) //בודק האם נמצא כבר משתמש 
+        {
+            currentUser = JSON.parse(localStorage.getItem('currentUserSt')) //currentUser אם יש מכניס אותם ל
+        
+        }
+        else
+        {
+            currentUser=new user("אנונימי",0,0)
+            localStorage.setItem('currentUserSt',JSON.stringify(currentUser))//currentUserSt אם לא שם ערכי ברירת מחדל ואז מכניס ל
+
+        }
+        document.getElementById("thename").innerHTML=currentUser.name //שם את שם המשתמש בחלונית של הפרופיל
+
+
+        document.getElementById('play').addEventListener('click',function(){window.location.href='level.html'})
+        document.getElementById('instructions').addEventListener('click',function(){window.location.href='instructions.html'})
+        document.getElementById('hiest').addEventListener('click',function(){window.location.href='hiest.html'})
+        document.getElementById('user').addEventListener('click',function(){window.location.href='users.html'})
+
+        // פונקציה שתבדוק את גובה המסך ותשנה את ה-class בהתאם
+        function checkScreenSize()
+         {
+            const b=document.getElementById("bdy")
+            const u=document.getElementById("theUser")
+            const un=document.getElementById("thename")
+            if (window.innerWidth < 427) {
+                b.classList.add('bdyH')
+                u.classList.add('horizontalUser')
+                document.getElementById("thename").style.marginLeft="12vh"
+                document.getElementById("btndiv").style.transform="rotate(90deg)"
+                document.getElementById("play").style.width="20vh"
+                document.getElementById("instructions").style.width="20vh"
+                document.getElementById("hiest").style.width="20vh"
+                document.getElementById("user").style.width="20vh"
+                document.getElementById("btndiv").style.marginTop="12vh"
+            } else {
+                b.classList.remove('bdyH')
+                u.classList.remove('horizontalUser')
+            }
+        }
+
+        // בודקת את גובה המסך כאשר הדף נטען
+        checkScreenSize();
+
+        // מוסיפה מאזין לאירוע resize שיבודק את גובה המסך בכל שינוי גובה
+        window.addEventListener('resize', checkScreenSize);
+    </script>
+    
+</body>
+</html>

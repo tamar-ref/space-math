@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>משחק</title>
+    <link rel="stylesheet" href="game.css">
+    <link rel="stylesheet" href="general.css">
+</head>
+<body id="bdy">
+    <div id="theUser">
+        <img class="userleft" src="תמונות/user.png" alt="user">
+        <p class="userleft" id="thename"></p>
+    </div>
+    <p id="timer">10</p>
+    <p>ניקוד:</p>
+    <p id="points">0</p>
+    <p id="question" ></p>
+    <p id="p"></p>
+    <p id="astronout"></p>
+    <div class="imgs">
+        <img src="תמונות/Character1.png" alt="" class="character1" id="in1">
+        <img src="תמונות/Character1.png" alt="" class="character1" id="in2">
+        <img src="תמונות/Character1.png" alt="" class="character1" id="in3">
+        <img src="תמונות/Character1.png" alt="" class="character1" id="in4">
+        <img src="תמונות/Character1.png" alt="" class="character1" id="in5">
+        <img src="תמונות/Character1.png" alt="" class="character1" id="in6">
+        <img src="תמונות/Character1.png" alt="" class="character1" id="in7">
+        <img src="תמונות/Character1.png" alt="" class="character1" id="in8">
+        <img src="תמונות/Character1.png" alt="" class="character1" id="in9">
+        <img src="תמונות/Character1.png" alt="" class="character1" id="in10">
+        <img src="תמונות/Character1.png" alt="" class="character1" id="in11">
+        <img src="תמונות/Character1.png" alt="" class="character1" id="in12">
+        <img id="spaceshipIMG" src="תמונות/spaceship.png" alt="">
+        <img src="תמונות/Character2.png" alt="" class="character2" id="out1">
+        <img src="תמונות/Character2.png" alt="" class="character2" id="out2">
+        <img src="תמונות/Character2.png" alt="" class="character2" id="out3">
+        <img src="תמונות/Character2.png" alt="" class="character2" id="out4">
+        <img src="תמונות/Character2.png" alt="" class="character2" id="out5">
+        <img src="תמונות/Character2.png" alt="" class="character2" id="out6">
+        <img src="תמונות/Character2.png" alt="" class="character2" id="out7">
+        <img src="תמונות/Character2.png" alt="" class="character2" id="out8">
+        <img src="תמונות/Character2.png" alt="" class="character2" id="out9">
+        <img src="תמונות/Character2.png" alt="" class="character2" id="out10">
+        <img src="תמונות/Character2.png" alt="" class="character2" id="out11">
+        <img src="תמונות/Character2.png" alt="" class="character2" id="out12">
+    </div>
+</body>
+<script>
+    let hard = localStorage.getItem("hard")//רמת קושי
+    let enter//כמה נכנסים
+    let enter2//משתנה נוסף שאפשר לשנות (והמקורי משמש למקרה של הצגת פעולה שוב)
+    let enter3//כמה עוד נכנסים- לרמה הקשה
+    let enter4//משתנה נוסף שאפשר לשנות (והמקורי משמש למקרה של הצגת פעולה שוב)- לרמה הקשה
+    let out//כמה נכנסים
+    let out2//(משתנה נוסף שאפשר לשנות (והמקורי משמש למקרה של הצגת פעולה שוב
+    let out3//כמה עוד יוצאים- לרמה הקשה
+    let out4//משתנה נוסף שאפשר לשנות (והמקורי משמש למקרה של הצגת פעולה שוב)- לרמה הקשה
+    let points//ניקוד
+    let wrong//מספר תשובות שגויות
+    let timer//השניות שנותרו
+    let time//עצם הספירה לאחור
+    setTimeout("Start()",500)//כשהדף נפתח תופעל הפונקציה לאחר חצי שניה
+    function New_Game()//אפשרות למשחק חדש
+    {
+        document.getElementById("question").innerHTML=""//מבטל את השאלה
+        document.getElementById("p").innerHTML=""//מבטל את האפשרות לענות
+        Func()//מחזיר את תכונות האנימציה
+        clearInterval(time)//עצירת הטיימר
+        Start()
+    }
+        //מחלקה המכילה פרטי משתמש
+        class user{
+            constructor(name,highestScre,password){
+                this.name=name
+                this.highestScre=highestScre
+                this.password=password
+            }
+        }
+        let currentUser// משתנה עבור המשתמש הנוכחי
+        if(localStorage.getItem('currentUserSt')) //בודק האם נמצא כבר משתמש 
+        {
+            currentUser = JSON.parse(localStorage.getItem('currentUserSt')) //currentUser אם יש מכניס אותם ל
+        
+        }
+        else
+        {
+            currentUser=new user("אנונימי",0,0)
+            localStorage.setItem('currentUserSt',JSON.stringify(currentUser))//currentUserSt אם לא שם ערכי ברירת מחדל ואז מכניס ל
+
+        }
+        document.getElementById("thename").innerHTML=currentUser.name //שם את שם המשתמש בחלונית של הפרופיל
+
+
+        let users //מערך משתמשים
+        if(localStorage.getItem('usersarr')) //בודק האם קיימים כבר משתמשים 
+        {
+            users=JSON.parse(localStorage.getItem('usersarr')) //users אם יש מכניס אותם ל
+        }
+        else
+        {
+            users=[]
+            localStorage.setItem('usersarr',JSON.stringify(users)) //localStorge אם לא מאפס את המערך ואז מכניס ל
+        }
+
+
+    function Start()//התחלת המשחק
+    {
+        wrong=0//איפוס מספר התשובות השגויות
+        points=0//איפוס הניקוד
+        document.getElementById("points").innerHTML=points
+        Rand()
+    }
+    function Rand()//מגריל כמה נכנסו וכמה יצאו
+    {
+        document.getElementById("astronout").innerHTML=""//מבטל את הכפתורים
+        timer=10//איפוס הטיימר
+        document.getElementById("timer").innerHTML=timer
+        enter = Math.floor(Math.random()*6+1)//1...6 מגריל בין
+        enter2=1//מתחילים להכניס מהאסטרונאוט הראשון
+        out = Math.floor(Math.random()*enter+1)//1...enter בין בין
+        out2=1//מתחילים להוציא מהאסטרונאוט הראשון
+        if(hard=="true")//הכנסה והוצאה פעם שניה
+        {
+            enter3 = Math.floor(Math.random()*6+1)//1...6 מגריל בין
+            enter4=enter+1//מתחילים להכניס פעם שניה מהאסטרונאוט שאחרי האחרון שהכניסו
+            out3 = Math.floor(Math.random()*(enter+enter3-out)+1)//1...enter+enter3-out מגריל בין
+            out4=out+1//מתחילים להוציא פעם שניה מהאסטרונאוט שאחרי האחרון שהוציאו
+        }
+        In()
+    }
+    function In()//הכנסת הדמויות לחללית
+    {
+        if(enter2==enter+1)//אם נכנסו כל האסטרונאוטים
+        {
+            setTimeout("Out()",2500)//מפעיל את פונקצית הוצאת הדמויות מהחללית
+        }
+        else//אם צריכים להיכנס עוד אסטרונאוטים
+        {
+            document.getElementById("in"+enter2).style.right="45vw"//50-0.5*10 רוחב חצי מהמסך פחות חצי מרוחב האסטרונאוט
+            enter2=enter2+1//קידום האינדקס לפיו מכניסים לחללית
+            setTimeout("In()",1000)//חוזר ברקורסיה
+        }
+    }
+    function Out()//הוצאת הדמויות מהחללית
+    {
+        if(out2==out+1)//אם יצאו כל האסטרונאוטים שצריכים לצאת
+        {
+            if(hard!="true")//אם נבחרה הרמה הקלה
+            {
+                setTimeout("Question()",2500)//מפעיל את הפונקציה לשאלת השאלה
+            }
+            else//אם נבחרה הרמה הקשה
+            {
+                setTimeout("In2()",2500)//מפעיל את פונקצית הכנסת הדמויות לחללית פעם השניה
+            }
+        }
+        else//אם צריכים לצאת עוד אסטרונאוטים
+        {
+            document.getElementById("out"+out2).style.left = "-10%"//מוציא מחוץ למסך
+            out2=out2+1//קידום האינדקס לפיו מוציאים מהחללית
+            setTimeout("Out()",1000)//חוזר ברקורסיה
+        }
+    }
+    function In2()//הכנסת הדמויות לחללית בפעם השניה- לרמה הקשה
+    {
+        if(enter4==enter+enter3+1)//אם נכנסו כל האסטרונאוטים
+        {
+            setTimeout("Out2()",2500)//מפעיל את פונקצית הוצאת הדמויות מהחללית
+        }
+        else//אם צריכים להיכנס עוד אסטרונאוטים
+        {
+            document.getElementById("in"+enter4).style.right="45vw"//50-0.5*10 רוחב חצי מהמסך פחות חצי מרוחב האסטרונאוט
+            enter4=enter4+1//קידום האינדקס לפיו מכניסים לחללית
+            setTimeout("In2()",1000)//חוזר ברקורסיה
+        }
+    }
+    function Out2()//הוצאת הדמויות מהחללית בפעם השניה-לרמה הקשה
+    {
+        if(out4==out+out3+1)//אם יצאו כל האסטרונאוטים שצריכים לצאת
+        {
+            setTimeout("Question()",2500)//מפעיל את הפונקציה לשאלת השאלה
+        }
+        else//אם צריכים לצאת עוד אסטרונאוטים
+        {
+            document.getElementById("out"+out4).style.left = "-10%"//מוציא מחוץ למסך
+            out4=out4+1//קידום האינדקס לפיו מוציאים מהחללית
+            setTimeout("Out2()",1000)//חוזר ברקורסיה
+        }
+    }
+    function Timer()//מראה את הזמן הנותר
+    {
+        if(timer>0)//אם נשאר זמן
+        {
+            document.getElementById("timer").innerHTML=timer
+            timer=timer-1//הזמן יורד
+        }
+        else//אם הזמן נגמר
+        {
+            document.getElementById("timer").innerHTML="0"
+            document.getElementById("astronout").innerHTML="נגמר הזמן"
+            document.getElementById("question").innerHTML=""//מבטל את השאלה
+            document.getElementById("p").innerHTML=""//מבטל את האפשרות לענות
+            setTimeout("New_Round1()",1000)
+            clearInterval(time)
+        }
+    }
+    let answer
+    function Question()//שאילת השאלה ואפשרות לענות
+    {
+        for (let j = 1; j <= 6; j++)//מחזיר את האסטרונאוטים למקום המקורי ללא אנימציה
+        {
+            document.getElementById("in"+j).style.transition="none"
+            document.getElementById("out"+j).style.transition="none"
+            document.getElementById("in"+j).style.right="-10%"
+            document.getElementById("out"+j).style.left="45vw"
+        }
+        if(hard=="true")
+        {
+            for (let j =6 ; j <= 12; j++)//מחזיר את האסטרונאוטים למקום המקורי ללא אנימציה
+            {
+                document.getElementById("in"+j).style.transition="none"
+                document.getElementById("out"+j).style.transition="none"
+                document.getElementById("in"+j).style.right="-10%"
+                document.getElementById("out"+j).style.left="45vw"
+            }
+        }
+        time=setInterval(Timer,1000)//חוזרים על הפונקציה של הספירה לאחור כל שניה אחת
+        //אפשרות לענות
+        document.getElementById("question").innerHTML="?כמה אסטרונאוטים נותרו בחללית"//השאלה
+        answer=document.createElement("input")
+        answer.setAttribute("type","number")
+        answer.setAttribute("autofocus","true")
+        answer.setAttribute("id","answer")
+        document.getElementById("p").appendChild(answer)
+        document.getElementById("answer").addEventListener("keyup", function(event) {
+            if (event.key === 'Enter')// אם הלחצן הוא ENTER
+            { 
+                Check();//בדיקת התשובה
+            }
+        })
+        answer.focus()
+        //אפשרות להציג שוב
+        let b2=document.createElement("input")
+        b2.setAttribute("type","button")
+        b2.setAttribute("value","להראות שוב")
+        b2.setAttribute("onclick","Show_Again()")
+        document.getElementById("astronout").appendChild(b2)
+        //אפשרות לתרגיל חדש
+        let b3=document.createElement("input")
+        b3.setAttribute("type","button")
+        b3.setAttribute("value","תרגיל חדש")
+        b3.setAttribute("onclick","New_Round1()")
+        document.getElementById("astronout").appendChild(b3)
+        //אפשרות למשחק חדש
+        let b4=document.createElement("input")
+        b4.setAttribute("type","button")
+        b4.setAttribute("value","משחק חדש")
+        b4.setAttribute("onclick","New_Game()")
+        document.getElementById("astronout").appendChild(b4)
+    }
+    function Func()//מחזיר את תכונות האנימציה
+    {
+        for (let j = 1; j <= 6; j++)//מגדיר מחדש את האנימציה
+        {
+            document.getElementById("in"+j).style.transition="all 3s linear"
+            document.getElementById("out"+j).style.transition="all 3s linear"
+        }
+        if(hard=="true")
+        {
+            for (let j = 6; j <= 12; j++)//מגדיר מחדש את האנימציה
+            {
+                document.getElementById("in"+j).style.transition="all 3s linear"
+                document.getElementById("out"+j).style.transition="all 3s linear"
+            }
+        }
+    }
+    function Show_Again()//מראה שוב את אותו תרגיל
+    {
+        Func()//מחזיר את תכונות האנימציה
+        document.getElementById("astronout").innerHTML=""//מבטל את הכפתורים
+        document.getElementById("question").innerHTML=""//מבטל את השאלה
+        document.getElementById("p").innerHTML=""//מבטל את האפשרות לענות
+        clearInterval(time)//עוצר את הספירה לאחור למשך זמן ההצגה החוזרת
+        enter2=1//מתחילים להכניס מהאסטרונאוט הראשון
+        out2=1//מתחילים להוציא מהאסטרונאוט הראשון
+        if(hard=="true")
+        {
+            enter4=enter+1//מתחילים להכניס פעם שניה מהאסטרונאוט שאחרי האחרון שהכניסו
+            out4=out+1//מתחילים להוציא פעם שניה מהאסטרונאוט שאחרי האחרון שהוציאו
+        }
+        In()//פונקצית ההכנסה לחללית
+    }
+    function New_Round1()//סיבוב חדש בגלל טעות או שנגמר הזמן
+    {
+        document.getElementById("question").innerHTML=""//מבטל את השאלה
+        document.getElementById("p").innerHTML=""//מבטל את האפשרות לענות
+        wrong=wrong+1
+        if(wrong==3)//נגמר המשחק
+        {
+            Game_Over()
+        }
+        else
+        {
+            New_Round()
+        }
+    }
+    function New_Round()
+    {
+        clearInterval(time)
+        Func()//מחזיר את תכונות האנימציה
+        document.getElementById("astronout").innerHTML=""//מבטל את הכפתורים
+        Rand()//עושה סיבוב חדש
+    }
+    function Check()//בדיקת התשובה שהוקשה
+    {
+        document.getElementById("question").innerHTML=""//מבטל את השאלה
+        document.getElementById("p").innerHTML=""//מבטל את האפשרות לענות
+        Func()//מחזיר את תכונות האנימציה
+        clearInterval(time)//עצירת הספירה לאחור
+        if((hard!="true" && answer.value==enter-out) || (hard=="true" && answer.value==(enter+enter3-out-out3)))//אם התשובה נכונה
+        {
+            document.getElementById("astronout").innerHTML="תשובה נכונה"//הדפסת תגובה
+            points=points+1//הוספת נקודה
+            document.getElementById("points").innerHTML=points//מדפיס את הניקוד החדש
+            setTimeout("Rand()",1000)//כדי שיראו את התגובה עושים סיבוב חדש לאחר שניה
+        }
+        else//אם התשובה שגויה
+        {
+            wrong=wrong+1
+            if(wrong==3)//נגמר המשחק
+            {
+                Game_Over()
+            }
+            else//נגמר הסיבוב
+            {
+                document.getElementById("astronout").innerHTML="טעות"//הדפסת תגובה
+                setTimeout("Rand()",1000)//כדי שיראו את התגובה עושים סיבוב חדש לאחר שניה
+            }
+        }
+    }
+    function Game_Over()
+    {
+        clearInterval(time)
+        document.getElementById("question").innerHTML="game over"//הדפסת תגובה
+        //בדיקה האם נשבר שיא
+        if(points>currentUser.highestScre)
+        {
+            currentUser.highestScre=points
+            localStorage.setItem("currentUserSt",JSON.stringify(currentUserSt))//localStorage מעדכן את השיא ב
+            users[localStorage.getItem("currindex")]=currentUser
+            localStorage.setItem("usersarr",JSON.stringify(users))
+        }
+        //אפשרות למשחק חדש
+        let b4=document.createElement("input")
+        b4.setAttribute("type","button")
+        b4.setAttribute("value","משחק חדש")
+        b4.setAttribute("onclick","New_Game()")
+        document.getElementById("p").appendChild(b4)
+        document.getElementById("astronout").innerHTML=""//מבטל את הכפתורים
+
+            
+        // פונקציה שתבדוק את גובה המסך ותשנה את ה-class בהתאם
+        function checkScreenSize()
+        {
+        const b=document.getElementById("bdy")
+        const u=document.getElementById("theUser")
+        const un=document.getElementById("thename")
+        if (window.innerWidth < 427) {
+            b.classList.add('bdyH')
+            u.classList.add('horizontalUser')
+            document.getElementById("thename").style.marginLeft="12vh"
+        } else {
+            b.classList.remove('bdyH')
+            u.classList.remove('horizontalUser')
+        }
+    }
+
+    // בודקת את גובה המסך כאשר הדף נטען
+    checkScreenSize();
+
+    // מוסיפה מאזין לאירוע resize שיבודק את גובה המסך בכל שינוי גובה
+    window.addEventListener('resize', checkScreenSize);
+    }
+</script>
+</html>

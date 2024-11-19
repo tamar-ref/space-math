@@ -1,0 +1,66 @@
+body{
+    background-image: url(תמונות/background.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    direction: rtl;
+}
+.logo img{
+    position: relative;
+    width: 30vw;
+    top: 10vh;
+}
+#theUser{
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+.userleft
+{
+    position: relative;
+    left: 0;
+    top: 0;
+    display: inline-block;
+}
+#thename
+{
+    position: absolute;
+    top: 3vh;
+    left: 8vw;
+}
+#thetablediv
+{
+    position: absolute;
+    right: 0;
+}
+#thetext
+{
+    margin-left: 30vw;
+    margin-right: 30vw;
+    margin-top: 10vh;
+}
+
+
+
+/* כאשר יש את ה-class 'horizontal' - תצוגה לרוחב */
+.horizontalUser {
+    transform: rotate(90deg); /* תצוגה לרוחב */
+    right: 0;
+    margin-left: 75vw;
+}
+.bdyH{
+    background-image: url(תמונות/‏‏backgroundT.jpg);
+}
+.logoH
+{
+    transform: rotate(90deg);
+ /*   margin-top: 9vh;*/
+}
+.hH
+{
+    transform: rotate(90deg);
+    margin-top: 45vh;
+    margin-left: 70vw;
+    position: absolute;
+}

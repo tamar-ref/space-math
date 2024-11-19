@@ -1,0 +1,17 @@
+#btndiv{
+    position: relative;
+    top: 20vh;
+}
+.btnloacle
+{
+    text-align: center;
+    background-color: salmon;
+    border-color: cadetblue;
+    color: rgb(17, 62, 64);
+    font-size: 4vh;
+    padding: 1vh 2vw;
+    margin: 5px;
+    border-radius: 8px;
+    border:2px solid;
+    width: 12vw;
+}

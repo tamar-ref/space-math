@@ -1,0 +1,14 @@
+tr, td{
+    padding-left: 5vw;
+    padding-top: 2vh;
+}
+table
+{
+    position: relative;
+    margin-right: 43vw;
+    margin-top: 7vh;
+    font-size: 125%;
+}
+body{
+    direction: ltr;
+}

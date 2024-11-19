@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Math</title>
+    <link rel="stylesheet" href="general.css">
+</head>
+<body id="bdy">
+    <div id="theUser">
+        <img class="userleft" src="תמונות/user.png" alt="user">
+        <p class="userleft" id="thename"></p>
+    </div>
+    <p id="thetext">
+        <b>כללי המשחק:</b><br><br>
+        <b>קל: </b>בכל שלב נכנסים אסטרונאוטים עם מדים ויוצאים ללא מדים<br>
+        <b>קשה: </b>בכל שלב נכנסים אסטרונאוטים עם מדים ויוצאים ללא מדים ושוב נכנסים עוד אסטרונאוטים עם מדים ויוצאים ללא מדים<br>
+        <b>המשימה: </b>עליך לזהות כמה אסטרונאוטים נשארו בתוך החללית ולענות עד לסיום הטיימר או לבחור להראות את הפעולה שוב- שים לב שהטיימר ייעצר למשך הזמן של הצגת הפעולה שוב וימשיך לרדת מאותה השניה שבו הפסיק<br>
+        <b>צבירת נקודות: </b>בכל פעם תוכל לענות את תשובתך ואם היא נכונה תזכה בנקודה<br>
+        <b>פסילות: </b><br>
+        <b>1. </b>ענית תשובה שגויה<br>
+        <b>2. </b>"לחיצה על כפתור: "תרגיל חדש<br>
+        <b>3. </b>אי ענית התשובה עד לסיום הטיימר<br>
+        <b>הפסד במשחק: </b>לאחר 3 פסילות המשחק ייגמר<br><br>
+        <b>שיאים: </b>בשיאים שלך תוכל לראות כמה נקודות צברת עד להפסד במשחק<br>
+    </p>
+    <script>
+                //מחלקה המכילה פרטי משתמש
+                class user{
+            constructor(name,highestScre,password){
+                this.name=name
+                this.highestScre=highestScre
+                this.password=password
+            }
+        }
+        let currentUser// משתנה עבור המשתמש הנוכחי
+        if(localStorage.getItem('currentUserSt')) //בודק האם נמצא כבר משתמש 
+        {
+            currentUser = JSON.parse(localStorage.getItem('currentUserSt')) //currentUser אם יש מכניס אותם ל
+        
+        }
+        else
+        {
+            currentUser=new user("אנונימי",0,0)
+            localStorage.setItem('currentUserSt',JSON.stringify(currentUser))//currentUserSt אם לא שם ערכי ברירת מחדל ואז מכניס ל
+
+        }
+        document.getElementById("thename").innerHTML=currentUser.name //שם את שם המשתמש בחלונית של הפרופיל
+
+                // פונקציה שתבדוק את גובה המסך ותשנה את ה-class בהתאם
+                function checkScreenSize()
+         {
+            const b=document.getElementById("bdy")
+            const u=document.getElementById("theUser")
+            const un=document.getElementById("thename")
+            if (window.innerWidth < 427) {
+                b.classList.add('bdyH')
+                u.classList.add('horizontalUser')
+                document.getElementById("thename").style.marginLeft="12vh"
+                document.getElementById("thetext").style.transform="rotate(90deg)"
+                document.getElementById("thetext").style.marginTop="25vh"
+                document.getElementById("thetext").style.marginLeft="5vw"
+                document.getElementById("thetext").style.marginRight="5vw"
+                document.getElementById("thetext").style.fontSize="90%"
+            } else {
+                b.classList.remove('bdyH')
+                u.classList.remove('horizontalUser')
+            }
+        }
+
+        // בודקת את גובה המסך כאשר הדף נטען
+        checkScreenSize();
+
+        // מוסיפה מאזין לאירוע resize שיבודק את גובה המסך בכל שינוי גובה
+        window.addEventListener('resize', checkScreenSize);
+    </script>
+</body>
+</html>

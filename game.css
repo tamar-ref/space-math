@@ -1,0 +1,50 @@
+body{
+    overflow: hidden;/*למנוע גלילה*/
+    position: relative;
+    height: 100vh;
+}
+#spaceshipIMG{
+    margin-left: 0; /* מסיר מרווחים של ברירת מחדל */
+    display: flex; /* מפעיל Flexbox */
+    justify-content: center; /* ממקם את התוכן במרכז לרוחב */
+    /*align-items: flex-end; /* ממקם את התוכן בתחתית */ 
+    position: absolute;
+    width: 30vw;
+    right: 35vw;/*מיקום התחלתי באמצע המסך*/
+    bottom: 12vh;
+}
+.character1,.character2{
+    width: 10vw;
+    position: absolute;
+    z-index: -1; /* נמצא מתחת */
+    transition: all 3s linear;/*הדמויות יעברו את המרחק הרצוי ב3 שניות בצורה לינארית- קצב אחיד וחלק*/
+    bottom: 20vh;
+}
+.character1{
+    right: -10%;/*מיקום התחלתי מחוץ למסך*/
+}
+.character2{
+    left: 45vw;/*מיקום התחלתי באמצע המסך- מתחת לחללית*/
+}
+#timer{
+    position: fixed;
+    top: 5vh;
+    right: 5vw;
+    font-size: 300%;
+    color: salmon;
+}
+input{
+    text-align: center;
+    background-color: salmon;
+    border-color: cadetblue;
+    color: rgb(17, 62, 64);
+    font-size: 2vh;
+    padding: 1vh 2vw;
+    margin: 5px;
+    border-radius: 8px;
+    border:2px solid;
+    width: 10vw;
+}
+p{
+    font-size: 130%;
+}

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Math</title>
+    <link rel="stylesheet" href="general.css">
+    <link rel="stylesheet" href="users.css">
+</head>
+
+<body id="bdy">
+    <div id="theUser">
+        <img class="userleft" src="תמונות/user.png" alt="user">
+        <p class="userleft" id="thename">name</p>
+    </div>
+    <div id="allusers">
+    </div>
+    <div id="pass">
+        <label for="p">סיסמה</label>
+        <input id="p" type="password">
+        <input id="close" type="button" value="X">
+    </div>
+    <div id="newuserdiv">
+        <input id="closenew" type="button" value="X">
+        <label for="newName">שם</label>
+        <input id="newName" type="text"><br>
+        <label for="newPassword">סיסמה</label>
+        <input id="newPassword" type="text"><br>
+        <input id="oknew" type="button" value="אישור">
+    </div>
+    <input id="newuser" type="button" value="משתמש חדש">
+    <a class="logo" class="headlink" href="mainPage.html"><input type="button" value="<<" id="back"></a>
+    <script>
+        //מחלקה המכילה פרטי משתמש
+        class user{
+            constructor(name,highestScre,password){
+                this.name=name
+                this.highestScre=highestScre
+                this.password=password
+            }
+        }
+        document.getElementById("oknew").addEventListener("click",newUser)
+        document.getElementById("closenew").addEventListener("click",closeDiv)
+        document.getElementById("close").addEventListener("click",closeDiv)
+        document.getElementById("newuser").addEventListener("click",function()
+        {document.getElementById("newuserdiv").style.display= "block";document.getElementById("allusers").style.display="none"})
+
+        let users //מערך משתמשים
+        if(localStorage.getItem('usersarr')) //בודק האם קיימים כבר משתמשים 
+        {
+            users=JSON.parse(localStorage.getItem('usersarr')) //users אם יש מכניס אותם ל
+        }
+        else
+        {
+            users=[]
+            localStorage.setItem('usersarr',JSON.stringify(users)) //localStorge אם לא מאפס את המערך ואז מכניס ל
+        }
+        
+        let currentUser// משתנה עבור המשתמש הנוכחי
+        if(localStorage.getItem('currentUserSt')) //בודק האם נמצא כבר משתמש 
+        {
+            currentUser = JSON.parse(localStorage.getItem('currentUserSt')) //currentUser אם יש מכניס אותם ל        
+        }
+        else
+        {
+            currentUser=new user("אנונימי",0,0)
+            localStorage.setItem('currentUserSt',JSON.stringify(currentUser))//currentUserSt אם לא שם ערכי ברירת מחדל ואז מכניס ל
+        }
+        document.getElementById("thename").innerHTML=currentUser.name //שם את שם המשתמש בחלונית של הפרופיל
+        
+        let index //משתנה שמכיל את המיקום במערך של המשתמש שנבחר
+
+        //לולאה שעוברת על המערך משתמשים ולפיו מייצרת כפתורים
+        for (let i = 0; i < users.length; i++)
+        {
+            let b=document.createElement("input")
+            b.setAttribute("type","button")
+            b.setAttribute("value",users[i].name)
+            b.setAttribute("id",i)
+            b.setAttribute("class","add")  
+            b.addEventListener("click",function(){document.getElementById("allusers").style.display="none"; document.getElementById("pass").style.display= "block";index=event.target.id})
+            document.getElementById("allusers").appendChild(b)
+        }
+        //בודק האם המשתמש לחץ enter ואז שולח לבדיקה של הסיסמא
+        document.getElementById("p").addEventListener("keydown",function(event){
+            if(event.key==='Enter'){
+                event.preventDefault()//מונע את הפעולה הברירת מחדל
+                choose()
+            }
+        })
+        //פעולה שבודקת האם הסיסמא שהוקשה נכונה
+        function choose()
+        {
+            let p=document.getElementById("p").value
+            if(p==users[index].password)
+            {
+                currentUser=users[index]
+                document.getElementById("thename").innerHTML=users[index].name
+                localStorage.setItem('currentUserSt', JSON.stringify(currentUser))
+                localStorage.setItem("currindex",index)
+                closeDiv()
+            }
+            else
+            {
+                document.getElementById("newPassword").value=""
+            }                      
+        }
+        function newUser()
+        {
+            let n=document.getElementById("newName").value
+            let p=document.getElementById("newPassword").value
+            let use= new user(n,0,p)
+            users.push(use)
+            localStorage.setItem('usersarr',JSON.stringify(users))
+            localStorage.setItem('currentUserSt',JSON.stringify(use))
+            localStorage.setItem("currindex",users.length-1)
+            currentUser=use
+            document.getElementById("newName").value=""
+            document.getElementById("newPassword").value=""
+            document.getElementById("newuserdiv").style.display= "none"
+            document.getElementById("allusers").style.display= "block"
+            document.getElementById("thename").innerHTML=n
+            //מוסיף את הכפתור של משתמש חדש
+            let b=document.createElement("input")
+            b.setAttribute("type","button")
+            b.setAttribute("value",n)
+            b.setAttribute("id",users.length-1)  
+            b.setAttribute("class","add")
+            b.addEventListener("click",function(){document.getElementById("allusers").style.display="none"; document.getElementById("pass").style.display= "block";index=event.target.id})
+            document.getElementById("allusers").appendChild(b)
+
+        }
+        function closeDiv()
+        {
+            document.getElementById("pass").style.display= "none"
+            document.getElementById("newuserdiv").style.display= "none"
+            document.getElementById("allusers").style.display= "block" 
+            document.getElementById("newName").value=""
+            document.getElementById("newPassword").value=""
+            document.getElementById("p").value=""
+        }
+
+                // פונקציה שתבדוק את גובה המסך ותשנה את ה-class בהתאם
+                function checkScreenSize()
+         {
+            const b=document.getElementById("bdy")
+            const u=document.getElementById("theUser")
+            const un=document.getElementById("thename")
+            if (window.innerWidth < 427) {
+                b.classList.add('bdyH')
+                u.classList.add('horizontalUser')
+                document.getElementById("thename").style.marginLeft="12vh"
+            } else {
+                b.classList.remove('bdyH')
+                u.classList.remove('horizontalUser')
+            }
+        }
+
+        // בודקת את גובה המסך כאשר הדף נטען
+        checkScreenSize();
+
+        // מוסיפה מאזין לאירוע resize שיבודק את גובה המסך בכל שינוי גובה
+        window.addEventListener('resize', checkScreenSize);
+    </script>
+</body>
+</html>
